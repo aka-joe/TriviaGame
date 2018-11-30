@@ -3,7 +3,7 @@ $(document).ready(function () {
     var timer = $(".item");
     var screen = $("#quizScreen");
     var titleLogo = $("<img>").attr("src", "./assets/images/trivia.png").css("margin", "100px 0 40px");
-    var startBtn = $("<button type='button' class='btn btn-danger hvr-pulse-grow'>CLICK HERE TO START</button>");
+    var startBtn = $("<button type='button' id='start' class='btn btn-danger hvr-pulse-grow'>CLICK HERE TO START</button>");
     screen.html(titleLogo).append(startBtn);
 
     var qa = [
@@ -27,6 +27,10 @@ $(document).ready(function () {
 
     var qNum = 0;
     var qEnd = 10;
+    var q; // question
+    var a; // answer
+    var correct = 0;
+    var wrong = 0;
     var initialOffset = 314;
     var interval;
     var clockRunning = false;
@@ -47,11 +51,11 @@ $(document).ready(function () {
 
     var stopwatch = {
         time: 0,
-        endTime: 10,
+        endTime: 7,
         i: 0,
         start: function () {
             quizOn();
-            $('.circle_animation').css('stroke-dashoffset', initialOffset - (1 * (initialOffset / stopwatch.endTime)));
+            $('.circle_animation').css('stroke-dashoffset', initialOffset - (0 * (initialOffset / stopwatch.endTime)));
             $('.circle_animation2').css('stroke-dashoffset', initialOffset - ((qNum + 1) * (initialOffset / qEnd)));
             $('#roundNum').text(qNum + 1);
             i = 0;
@@ -82,13 +86,23 @@ $(document).ready(function () {
 
     function quizOn() {
         screen.empty();
-        var picture = $("<img>").attr({ "src": "./assets/images/" + qlist[qNum] + ".jpeg", "width": 579 });
-        var question = $("<h5>").addClass("quiz bg-danger text-white ml-2 mr-2 p-3").html("♫ " + qa[qlist[qNum]][0] + " ♫");
+        q = qlist[qNum];
+        a = qa[q][5];
+        var picture = $("<img>").attr({ "src": "./assets/images/" + q + ".jpeg", width: 579, height:330 });
+        var question = $("<h5>").addClass("quiz bg-danger text-white ml-2 mr-2 p-3").html("♫ " + qa[q][0] + " ♫");
         screen.append(picture, question);
         for (var i = 1; i <= 4; i++) {
-            var answer = $("<button>").addClass("btn btn-outline-dark m-2 p-0").css({width:132, height:132}).text(qa[qlist[qNum]][i]).val(i);
+            var answer = $("<button>").addClass("btn btn-outline-dark m-2 p-0 choices").css({width:132, height:132}).text(qa[q][i]).val(i);
             screen.append(answer);
         };
     };
 
+    $(document).on("click",".choices", function(event) {
+        var choice = Number($(this).val());
+        if (a === choice) {
+            console.log("right");
+        } else {
+            console.log("wrong");
+        }
+    });
 });
