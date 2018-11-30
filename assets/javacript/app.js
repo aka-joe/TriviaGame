@@ -6,49 +6,53 @@ $(document).ready(function () {
     var startBtn = $("<button type='button' class='btn btn-danger hvr-pulse-grow'>CLICK HERE TO START</button>");
     screen.html(titleLogo).append(startBtn);
 
-    var round = $("")
-
     var qa = [
-        ["ONE JUMP AHEAD OF THE __________, ONE SKIP AHEAD OF MY DOOM", "Law-men", "Slowpokes", "Bread line", "Flock", 2],
-        ["I KNOW YOU, THE GLEAM IN YOUR EYES IS SO FAMILIAR A __________", "Stream", "Beam", "Dream", "Gleam", 4],
-        ["I WANNA KNOW, CAN YOU ________ ME, I WANNA KNOW ABOUT THESE STRANGERS LIKE ME", "Tell", "Take", "Show", "Bring", 3],
-        ["WHY IS MY REFLECTION SOMEONE I _________ __________", "Can't hide", "Won't be", "Can't see", "Don't know", 4],
-        ["JUST AROUND THE RIVERBEND, BEYOND THE SHORE, WHERE THE _________ FLY FREE", "Gulls", "Birds", "Fish", "Waves", 1],
-        ["BUT NOW HE'S _________, AND SO UNSURE, I WONDER WHY I DIDN'T SEE IT THERE BEFORE", "Kind", "Nice", "Dear", "Here", 3],
-        ["SHA LA LA LA LA LA, DON'T BE SCARED, YOU GOT __________ _________ PREPARED", "The mood", "It all", "Her heart", "This thing", 1],
-        ["NOW I'M THE KING OF THE _________ OH, THE JUNGLE VIP", "Forest", "Swingers", "Jungle", "Dancers", 2],
-        ["LIKE A __________ IN THE SKY, YOU CAN FLY! YOU CAN FLY! YOU CAN FLY!", "Rainbow", "Eagle", "Reindeer", "Fairy", 3],
-        ["IT AIN'T NO TRICK TO GET RICH QUICK IF YOU __________ __________ _________ WITH A SHOVEL OR A PICK", "Work work work", "Dig dig dig", "Good good good", "Quick quick quick", 2],
-        ["SO SHE'S A BIT OF A FIXER-UPPER, HER BRAIN'S A BIT __________", "Below", "Amidst", "Betwixt", "Between", 3],
-        ["WINNIE THE POOH, WINNIE THE POOH, CHUBBY LITTLE _________ ALL STUFFED WITH FLUFF", "Cubby", "Teddy", "Buddy", "Tubby", 1],
-        ["HE SHOWED THE __________, BRAINS, AND SPUNK, FROM ZERO TO HERO, A MAJOR HUNK", "Bravery", "Moxie", "Courage", "Gusto", 2],
+        ["ONE JUMP AHEAD OF THE __________,<br>ONE SKIP AHEAD OF MY DOOM", "Law-men", "Slowpokes", "Bread line", "Flock", 2],
+        ["I KNOW YOU, THE GLEAM IN YOUR EYES<br>IS SO FAMILIAR A __________", "Stream", "Beam", "Dream", "Gleam", 4],
+        ["I WANNA KNOW, CAN YOU ________ ME,<br>I WANNA KNOW ABOUT THESE STRANGERS LIKE ME", "Tell", "Take", "Show", "Bring", 3],
+        ["WHY IS MY REFLECTION SOMEONE<br>I _________ __________", "Can't hide", "Won't be", "Can't see", "Don't know", 4],
+        ["JUST AROUND THE RIVERBEND, BEYOND THE SHORE,<br>WHERE THE _________ FLY FREE", "Gulls", "Birds", "Fish", "Waves", 1],
+        ["BUT NOW HE'S _________, AND SO UNSURE,<br>I WONDER WHY I DIDN'T SEE IT THERE BEFORE", "Kind", "Nice", "Dear", "Here", 3],
+        ["SHA LA LA LA LA LA, DON'T BE SCARED,<br>YOU GOT __________ _________ PREPARED", "The mood", "It all", "Her heart", "This thing", 1],
+        ["NOW I'M THE KING OF THE _________<br>OH, THE JUNGLE VIP", "Forest", "Swingers", "Jungle", "Dancers", 2],
+        ["LIKE A __________ IN THE SKY,<br>YOU CAN FLY! YOU CAN FLY! YOU CAN FLY!", "Rainbow", "Eagle", "Reindeer", "Fairy", 3],
+        ["IT AIN'T NO TRICK TO GET RICH QUICK IF YOU<br>__________ __________ _________ WITH A SHOVEL OR A PICK", "Work work work", "Dig dig dig", "Good good good", "Quick quick quick", 2],
+        ["SO SHE'S A BIT OF A FIXER-UPPER,<br>HER BRAIN'S A BIT __________", "Below", "Amidst", "Betwixt", "Between", 3],
+        ["WINNIE THE POOH, WINNIE THE POOH,<br>CHUBBY LITTLE _________ ALL STUFFED WITH FLUFF", "Cubby", "Teddy", "Buddy", "Tubby", 1],
+        ["HE SHOWED THE __________, BRAINS, AND SPUNK,<br>FROM ZERO TO HERO, A MAJOR HUNK", "Bravery", "Moxie", "Courage", "Gusto", 2],
         ["I'VE SEEN A FRONT PORCH SWING, HEARD A DIAMOND RING, I'VE SEEN A __________ __________ RAILROAD TIE", "Zig zag", "20 cent", "Bright blue", "Polka dot", 4],
-        ["CAN YOU FEEL THE LOVE TONIGHT, THE __________ THE EVENING BRINGS", "Peace", "Joy", "Rest", "Calm", 1]
-    ]; // ♫
+        ["CAN YOU FEEL THE LOVE TONIGHT,<br>THE __________ THE EVENING BRINGS", "Peace", "Joy", "Rest", "Calm", 1]
+    ];
+    var qlist = [];
 
     var qNum = 0;
+    var qEnd = 10;
     var initialOffset = 314;
+    var interval;
+    var clockRunning = false;
+
+    for (var i = 0; i < qEnd; i++) {
+        do {
+            var num = Math.floor(Math.random() * 15);
+        }
+        while (qlist.includes(num));
+        qlist.push(num);
+    }
 
     startBtn.on("click", function () {
-        screen.empty();
-        counter.css("display","block");
-        timer.css("display","block");
+        counter.css("display", "block");
+        timer.css("display", "block");
         stopwatch.start();
     });
-
-    var interval;
-
-    var clockRunning = false;
 
     var stopwatch = {
         time: 0,
         endTime: 10,
-        i: 1,
-        reset: function () {
-        },
+        i: 0,
         start: function () {
+            quizOn();
             $('.circle_animation').css('stroke-dashoffset', initialOffset - (1 * (initialOffset / stopwatch.endTime)));
-            $('.circle_animation2').css('stroke-dashoffset', initialOffset - ((qNum + 1) * (initialOffset / 15)));
+            $('.circle_animation2').css('stroke-dashoffset', initialOffset - ((qNum + 1) * (initialOffset / qEnd)));
             $('#roundNum').text(qNum + 1);
             i = 0;
             stopwatch.time = 0;
@@ -61,7 +65,7 @@ $(document).ready(function () {
             clearInterval(interval);
             clockRunning = false;
             qNum++;
-            if (qNum < 15) {
+            if (qNum < qEnd) {
                 stopwatch.start();
             }
         },
@@ -76,7 +80,15 @@ $(document).ready(function () {
         }
     }
 
-
-    /* Need initial run as interval hasn't yet occured... */
+    function quizOn() {
+        screen.empty();
+        var picture = $("<img>").attr({ "src": "./assets/images/" + qlist[qNum] + ".jpeg", "width": 579 });
+        var question = $("<h5>").addClass("quiz bg-danger text-white ml-2 mr-2 p-3").html("♫ " + qa[qlist[qNum]][0] + " ♫");
+        screen.append(picture, question);
+        for (var i = 1; i <= 4; i++) {
+            var answer = $("<button>").addClass("btn btn-outline-dark m-2 p-0").css({width:132, height:132}).text(qa[qlist[qNum]][i]).val(i);
+            screen.append(answer);
+        };
+    };
 
 });
