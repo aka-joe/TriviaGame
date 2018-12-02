@@ -31,6 +31,20 @@ html {
     text-align: center;
 }
 
+#result {
+  position: absolute;
+  text-align: center;
+  width:579px;
+  top:140px;
+  left:15px;
+  font-size: 64px;
+  font-family: 'Gloria Hallelujah', cursive;
+}
+
+#score {
+  position: absolute;
+}
+
 /* Pulse Grow */
 @-webkit-keyframes hvr-pulse-grow {
     to {
@@ -78,12 +92,12 @@ html {
     -webkit-transition-property: transform;
     transition-property: transform;
   }
-  .hvr-grow-rotate:hover, .hvr-grow-rotate:focus, .hvr-grow-rotate:active {
+.hvr-grow-rotate:hover, .hvr-grow-rotate:focus, .hvr-grow-rotate:active {
     -webkit-transform: scale(1.1) rotate(4deg);
     transform: scale(1.1) rotate(4deg);
   }
 
-  .item {
+.item {
     position: absolute;
     top: 20px;
     left: 190px;
@@ -121,4 +135,8 @@ svg {
   stroke-dasharray: 314; /* this value is the pixel circumference of the circle */
   stroke-dashoffset: 314;
   transition: all 1s linear;
+}
+
+h1 {
+  margin-top: 110px;
 }

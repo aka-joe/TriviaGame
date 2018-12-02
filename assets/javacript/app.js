@@ -2,20 +2,16 @@ $(document).ready(function () {
     var counter = $(".round");
     var timer = $(".item");
     var screen = $("#quizScreen");
-    var titleLogo = $("<img>").attr("src", "./assets/images/trivia.png").css("margin", "100px 0 40px");
+    var titleLogo = $("<img>").attr({ "src": "./assets/images/trivia.png", "id": "logo" }).css("margin", "100px 0 40px");
     var startBtn = $("<button type='button' id='start' class='btn btn-danger hvr-pulse-grow'>CLICK HERE TO START</button>");
+    var result = $("<div id='result'>");
+    var score = $("<div id='score'>");
     screen.html(titleLogo).append(startBtn);
 
     var initialOffset = 314;
-    var interval, interval2;
     var clockRunning = false;
-    var correct = 0;
-    var wrong = 0;
-    var q; // question
-    var a; // answer
-    var qlist = [];
-    var qNum = 0;
-    var qEnd = 10;
+    var interval, interval2, correct, wrong, timeout, q, a, qlist, qNum;
+    var qEnd = 10; // # of Questions
     var qa = [
         ["ONE JUMP AHEAD OF THE __________,<br>ONE SKIP AHEAD OF MY DOOM", "Law-men", "Slowpokes", "Bread line", "Flock", 2],
         ["I KNOW YOU, THE GLEAM IN YOUR EYES<br>IS SO FAMILIAR A __________", "Stream", "Beam", "Dream", "Gleam", 4],
@@ -34,14 +30,24 @@ $(document).ready(function () {
         ["CAN YOU FEEL THE LOVE TONIGHT,<br>THE __________ THE EVENING BRINGS", "Peace", "Joy", "Rest", "Calm", 1]
     ];
 
-    // Ramdomize questions' order
-    for (var i = 0; i < qEnd; i++) {
-        do {
-            var num = Math.floor(Math.random() * 15);
+    function resetGame() {
+        // Reset variables;
+        correct = 0;
+        wrong = 0;
+        timeout = 0;
+        qNum = 0;
+        qlist = [];
+
+        // Ramdomize questions' order
+        for (var i = 0; i < qEnd; i++) {
+            do {
+                var num = Math.floor(Math.random() * 15);
+            }
+            while (qlist.includes(num));
+            qlist.push(num);
         }
-        while (qlist.includes(num));
-        qlist.push(num);
-    }
+    };
+    resetGame();
 
     // Game timer
     var stopwatch = {
@@ -54,7 +60,7 @@ $(document).ready(function () {
             q = qlist[qNum];
             a = qa[q][5];
             $('#timeNum').text(stopwatch.endTime);
-            var picture = $("<img>").attr({ "src": "./assets/images/" + q + ".jpeg" });
+            var picture = $("<img>").attr({ "src": "./assets/images/" + q + ".jpeg", "id": "quizPic" });
             var question = $("<h5>").addClass("quiz bg-danger text-white ml-2 mr-2 p-3").html("♫ " + qa[q][0] + " ♫");
             screen.append(picture, question);
             for (var i = 1; i <= 4; i++) {
@@ -84,34 +90,56 @@ $(document).ready(function () {
         },
         stop: function (answer) {
             $('.circle_animation').css('stroke-dashoffset', initialOffset);
+            $("#quizPic").css("opacity", 0.2);
             clearInterval(interval);
             clockRunning = false;
             if (answer === 1) {
                 // Correct answer
                 correct++;
+                result.text("Correct!").css("color", "#209020");
                 $("#answer" + a).css({ "background-color": "#60bb60", color: "white" });
-            } else {
+            } else if (answer === 0) {
+                // Wrong answer
                 wrong++;
-                if (answer === 0) {
-                    // Wrong answer
-                    $("#answer" + a).css({ "background-color": "#d93749", color: "white" });
-                } else {
-                    // Time's up
-                    wrong++;
-                    $("#answer" + a).css({ "background-color": "#d93749", color: "white" });
-                };
+                result.text("Incorrect!").css("color", "#804040");
+                $("#answer" + a).css({ "background-color": "#d93749", color: "white" });
+            } else {
+                // Time's up
+                timeout++;
+                result.text("Time's up!").css("color", "#804040");
+                $("#answer" + a).css({ "background-color": "#d93749", color: "white" });
             };
+            screen.append(result);
             if (++qNum < qEnd) {
+                // Next question
                 interval2 = setInterval(stopwatch.start, 2500);
+            } else {
+                // End game
+                interval2 = setInterval(stopwatch.end, 2500);
             }
+        },
+        end: function () {
+
+            var endMsg = $("<h1>ALL DONE!</h1><h2>HERE'S HOW YOU DID IT!</h2>");
+            var cScore = $("<h3 class='mt-5'>").text("Correct answer : " + correct);
+            var iScore = $("<h3>").text("Incorrect answer : " + wrong);
+            var uScore = $("<h3 class='mb-5'>").text("Unanswered : " + timeout);
+
+            // Clear screen & reset the game
+            counter.fadeOut();
+            timer.fadeOut();
+            screen.empty();
+
+            screen.append(endMsg, cScore, iScore, uScore, startBtn);
         }
     };
 
     // if the start game button is clicked..
-    startBtn.on("click", function () {
-        counter.css("display", "block");
-        timer.css("display", "block");
+    $(document).on("click", "#start", function () {
         $('.circle_animation').css('stroke-dashoffset', initialOffset);
+        resetGame();
+        counter.fadeIn(1000);
+        timer.fadeIn(1000);
         stopwatch.start();
     });
 
