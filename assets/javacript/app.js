@@ -55,7 +55,7 @@ $(document).ready(function () {
         // Ramdomize questions' order
         for (var i = 0; i < qEnd; i++) {
             do {
-                var num = Math.floor(Math.random() * 15);
+                var num = Math.floor(Math.random() * qa.length);
             }
             while (qlist.includes(num));
             qlist.push(num);
