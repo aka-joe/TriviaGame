@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    // Create DIV, IMG, BUTTONs for display
     var counter = $(".round");
     var timer = $(".item");
     var screen = $("#quizScreen");
@@ -8,10 +9,13 @@ $(document).ready(function () {
     var score = $("<div id='score'>");
     screen.html(titleLogo).append(startBtn);
 
+    // Initialize variables
     var initialOffset = 314;
     var clockRunning = false;
     var interval, interval2, correct, wrong, timeout, q, a, qlist, qNum;
-    var qEnd = 10; // # of Questions
+    var qEnd = 8; // # of Questions
+
+    // Questions array
     var qa = [
         ["ONE JUMP AHEAD OF THE __________,<br>ONE SKIP AHEAD OF MY DOOM", "Law-men", "Slowpokes", "Bread line", "Flock", 2],
         ["I KNOW YOU, THE GLEAM IN YOUR EYES<br>IS SO FAMILIAR A __________", "Stream", "Beam", "Dream", "Gleam", 4],
@@ -52,8 +56,9 @@ $(document).ready(function () {
     // Game timer
     var stopwatch = {
         time: 0,
-        endTime: 7,
+        endTime: 8,
         qi: 0,
+        // Reset game timer and screen
         reset: function () {
             clearInterval(interval2);
             screen.empty();
@@ -68,6 +73,7 @@ $(document).ready(function () {
                 screen.append(answer);
             };
         },
+        // Start game timer
         start: function () {
             stopwatch.reset();
             $('.circle_animation2').css('stroke-dashoffset', initialOffset - ((qNum + 1) * (initialOffset / qEnd)));
@@ -79,6 +85,7 @@ $(document).ready(function () {
                 clockRunning = true;
             }
         },
+        // Countdown game timer
         count: function () {
             $('#timeNum').text(stopwatch.endTime - stopwatch.qi);
             if (stopwatch.qi === stopwatch.endTime) {
@@ -88,6 +95,7 @@ $(document).ready(function () {
             $('.circle_animation').css('stroke-dashoffset', initialOffset - ((stopwatch.qi + 1) * (initialOffset / stopwatch.endTime)));
             stopwatch.qi++;
         },
+        // Stop game timer and report
         stop: function (answer) {
             $('.circle_animation').css('stroke-dashoffset', initialOffset);
             $("#quizPic").css("opacity", 0.2);
@@ -118,18 +126,16 @@ $(document).ready(function () {
                 interval2 = setInterval(stopwatch.end, 2500);
             }
         },
+        // End game
         end: function () {
-
             var endMsg = $("<h1>ALL DONE!</h1><h2>HERE'S HOW YOU DID IT!</h2>");
-            var cScore = $("<h3 class='mt-5'>").text("Correct answer : " + correct);
+            var cScore = $("<h3>").text("Correct answer : " + correct);
             var iScore = $("<h3>").text("Incorrect answer : " + wrong);
-            var uScore = $("<h3 class='mb-5'>").text("Unanswered : " + timeout);
-
+            var uScore = $("<h3>").text("Unanswered : " + timeout);
             // Clear screen & reset the game
             counter.fadeOut();
             timer.fadeOut();
             screen.empty();
-
             screen.append(endMsg, cScore, iScore, uScore, startBtn);
         }
     };
@@ -148,9 +154,9 @@ $(document).ready(function () {
         if (clockRunning) {
             var choice = Number($(this).val());
             if (a === choice) {
-                stopwatch.stop(1);
+                stopwatch.stop(1); // The answer is correct
             } else {
-                stopwatch.stop(0);;
+                stopwatch.stop(0);; // The answer is incorrect
             };
         };
     });
