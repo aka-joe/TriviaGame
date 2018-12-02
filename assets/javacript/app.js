@@ -3,17 +3,27 @@ $(document).ready(function () {
     var counter = $(".round");
     var timer = $(".item");
     var screen = $("#quizScreen");
-    var titleLogo = $("<img>").attr({ "src": "./assets/images/trivia.png", "id": "logo" }).css("margin", "100px 0 40px");
+    var titleLogo = $("<img>").attr({ "src": "./assets/images/trivia.png", "id": "logo" }).css("margin", "90px 0 40px");
     var startBtn = $("<button type='button' id='start' class='btn btn-danger hvr-pulse-grow'>CLICK HERE TO START</button>");
     var result = $("<div id='result'>");
     var score = $("<div id='score'>");
     screen.html(titleLogo).append(startBtn);
 
+    // Initialize sounds
+    var correctSFX = document.createElement('audio');
+    var wrongSFX = document.createElement('audio');
+    var tickSFX = document.createElement('audio');
+    var endSFX = document.createElement('audio');
+    correctSFX.setAttribute('src', './assets/sounds/correct.mp3');
+    wrongSFX.setAttribute('src', './assets/sounds/wrong.mp3');
+    tickSFX.setAttribute('src', './assets/sounds/ticking.mp3');
+    endSFX.setAttribute('src', './assets/sounds/end.mp3');
+
     // Initialize variables
     var initialOffset = 314;
     var clockRunning = false;
     var interval, interval2, correct, wrong, timeout, q, a, qlist, qNum;
-    var qEnd = 8; // # of Questions
+    var qEnd = 10; // # of Questions
 
     // Questions array
     var qa = [
@@ -56,11 +66,14 @@ $(document).ready(function () {
     // Game timer
     var stopwatch = {
         time: 0,
-        endTime: 8,
+        endTime: 10,
         qi: 0,
         // Reset game timer and screen
         reset: function () {
             clearInterval(interval2);
+            tickSFX.currentTime = 0;
+            tickSFX.play();
+            endSFX.pause();
             screen.empty();
             q = qlist[qNum];
             a = qa[q][5];
@@ -97,6 +110,7 @@ $(document).ready(function () {
         },
         // Stop game timer and report
         stop: function (answer) {
+            tickSFX.pause();
             $('.circle_animation').css('stroke-dashoffset', initialOffset);
             $("#quizPic").css("opacity", 0.2);
             clearInterval(interval);
@@ -104,16 +118,19 @@ $(document).ready(function () {
             if (answer === 1) {
                 // Correct answer
                 correct++;
+                correctSFX.play();
                 result.text("Correct!").css("color", "#209020");
                 $("#answer" + a).css({ "background-color": "#60bb60", color: "white" });
             } else if (answer === 0) {
                 // Wrong answer
                 wrong++;
+                wrongSFX.play();
                 result.text("Incorrect!").css("color", "#804040");
                 $("#answer" + a).css({ "background-color": "#d93749", color: "white" });
             } else {
                 // Time's up
                 timeout++;
+                wrongSFX.play();
                 result.text("Time's up!").css("color", "#804040");
                 $("#answer" + a).css({ "background-color": "#d93749", color: "white" });
             };
@@ -123,6 +140,8 @@ $(document).ready(function () {
                 interval2 = setInterval(stopwatch.start, 2500);
             } else {
                 // End game
+                endSFX.currentTime = 0;
+                endSFX.play();
                 interval2 = setInterval(stopwatch.end, 2500);
             }
         },
