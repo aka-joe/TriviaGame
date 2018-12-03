@@ -14,6 +14,7 @@ $(document).ready(function () {
     var wrongSFX = document.createElement('audio');
     var tickSFX = document.createElement('audio');
     var endSFX = document.createElement('audio');
+    var music = document.createElement('audio');
     correctSFX.setAttribute('src', './assets/sounds/correct.mp3');
     wrongSFX.setAttribute('src', './assets/sounds/wrong.mp3');
     tickSFX.setAttribute('src', './assets/sounds/ticking.mp3');
@@ -134,15 +135,17 @@ $(document).ready(function () {
                 result.text("Time's up!").css("color", "#804040");
                 $("#answer" + a).css({ "background-color": "#d93749", color: "white" });
             };
+            music.setAttribute('src', './assets/sounds/' + qlist[qNum] + '.mp3');
+            music.play();
             screen.append(result);
             if (++qNum < qEnd) {
                 // Next question
-                interval2 = setInterval(stopwatch.start, 2500);
+                interval2 = setInterval(stopwatch.start, 5200);
             } else {
                 // End game
                 endSFX.currentTime = 0;
                 endSFX.play();
-                interval2 = setInterval(stopwatch.end, 2500);
+                interval2 = setInterval(stopwatch.end, 5200);
             }
         },
         // End game
