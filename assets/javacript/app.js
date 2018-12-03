@@ -140,12 +140,12 @@ $(document).ready(function () {
             screen.append(result);
             if (++qNum < qEnd) {
                 // Next question
-                interval2 = setInterval(stopwatch.start, 5200);
+                interval2 = setInterval(stopwatch.start, 5500);
             } else {
                 // End game
                 endSFX.currentTime = 0;
                 endSFX.play();
-                interval2 = setInterval(stopwatch.end, 5200);
+                interval2 = setInterval(stopwatch.end, 5500);
             }
         },
         // End game
