@@ -20,6 +20,6 @@ Created with HTML, CSS, Bootstrap and JavaScript.
 
 * On the final screen, show the number of correct answers, incorrect answers, and an option to restart the game (without reloading the page).
 
-### Draft Design
+### Draft design & Screenshot
 
 ![Alt_text](./assets/images/DraftDesign.jpg "Draft Design")
