@@ -3,7 +3,7 @@
 ### Overview
 
 This is Disney song lyrics / Trivia game with timer.  
-Created with HTML, CSS, Bootstrap and JavaScript.  [Click here to try this game.](https://aka-joe.github.io/TriviaGame/) 
+Created with HTML, CSS, Bootstrap and JavaScript.  [Click here to try this game.](https://cre8dev.github.io/TriviaGame/) 
 
 
 ### Draft design & Screenshot
